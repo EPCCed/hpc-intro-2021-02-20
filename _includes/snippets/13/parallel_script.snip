@@ -1,0 +1,15 @@
+```
+#!/bin/bash
+#PBS -N mpisharpen
+#PBS -l select=2
+#PBS -l walltime=00:10:00
+#PBS -A tc011
+
+# Change to the directory that the job was submitted from
+cd $PBS_O_WORKDIR
+
+module load epcc-training/sharpen
+cp $SHARPEN_DATA/fuzzy.pgm .
+
+aprun -n 48 -N 24 sharpen
+```

@@ -1,0 +1,13 @@
+```
+aprun -n 48 -N 24 sharpen
+```
+
+and this corresponds to the four required items we described above:
+
+  1. Parallel launch program: in this case the parallel launch program is called `aprun`
+  2. Total number of parallel processes: in this case this is 48 (all the cores on two full 
+     compute nodes) and is specified by the `-n 48` option to `aprun`
+  3. Number of parallel processes per node: in this case this is 24 (number of cores on each
+     node) and is specified by the `-N 24` option to `aprun` (if not specified, the default is actually `-N 24`)
+  4. Our program and arguments: in this case this is `sharpen`, the program we want to run. It
+     does not take any arguments.
