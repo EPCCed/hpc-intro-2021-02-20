@@ -74,38 +74,35 @@ instructor_post_survey: "https://www.surveymonkey.com/r/instructor_training_post
 #   and:
 #     cp -r _extras/snippet_library/EPCC_Cirrus_pbs/* _includes/snippets
 #
-# EPCC, The University of Edinburgh: ARCHER + PBS Pro
-host_name: "ARCHER"
-host_hostname: "eslogin001"
-host_login: "login.archer.ac.uk"
+# EPCC, The University of Edinburgh: ARCHER2 + SLURM
+host_name: "ARCHER2"
+host_hostname: "uan01"
+host_login: "login.archer2.ac.uk"
 host_location: "EPCC, The University of Edinburgh"
-host_homedir: "/home/tc011/tc011/yourUsername/"
-host_workdir: "/work/tc011/tc011/yourUsername/"
-host_prompt: "yourUsername@eslogin001:~>"
+host_homedir: "/home/ta018/ta018/userid/"
+host_workdir: "/work/ta018/ta018/userid/"
+host_prompt: "userid@uan01:~>"
 local_prompt: "user@laptop:~$"
-sched_name: "PBS Pro"
-sched_submit: "qsub"
-sched_submit_options: "-q R7090776"
-sched_submit_options_long: "-q R7090776 -A tc011 -l select=1,walltime=0:10:0"
-sched_submitiopt: "-q R7090776 -A tc011 -IVl select=1,walltime=0:10:0"
-sched_status: "qstat"
-sched_flag_user: "-u yourUsername"
-sched_del: "qdel"
-sched_interactive: "qsub"
-sched_flag_interactive: "-IVl select=1"
-sched_info: "pbsnodes -a"
-sched_comment: "#PBS"
-sched_flag_name: "-N"
-sched_hist: "qstat -x"
-sched_flag_histdetail: "-f"
+sched_name: "SLURM"
+sched_submit: "sbatch"
+sched_submit_options: ""
+sched_status: "squeue"
+sched_flag_user: "-u userid"
+sched_del: "scancel"
+sched_interactive: "srun"
+sched_flag_interactive: ""
+sched_info: "sinfo"
+sched_comment: "#SBATCH"
+sched_flag_name: "-J"
+sched_hist: "sacct -u userid"
+sched_flag_histdetail: "-l -j"
 
 # Interactive queue names, one or more as a list
 workshop_interactive_queues:
-  - debug
-  - testing
+  - short
 
 # Start time in minutes (0 to be clock-independent, 540 to show a start at 09:00 am).
-start_time: 0
+start_time: 600
 
 # Specify that things in the episodes collection should be output.
 collections:

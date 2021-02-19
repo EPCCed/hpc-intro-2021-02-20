@@ -1,4 +1,9 @@
-* `-l select=<nnodes>` - how many nodes does your job need? Note that there are 24 cores per node on ARCHER.
+* `-n <nnodes>` - how many nodes does your job need? 
 
-* `-l walltime=<hours:minutes:seconds>` - How much real-world time (walltime) will your job take to
-  run?
+* `-c <ncpus>` - How many CPUs does your job need?
+
+* `--mem=<megabytes>` - How much memory on a node does your job need in megabytes? You can also
+  specify gigabytes using by adding a little "g" afterwards (example: `--mem=5g`)
+
+* `--time <days-hours:minutes:seconds>` - How much real-world time (walltime) will your job take to
+  run? The `<days>` part can be omitted.
