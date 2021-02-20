@@ -1,11 +1,14 @@
 > > #!/bin/bash
+> >
+> > #SBATCH --partition=standard
+> > #SBATCH --qos=standard
+> > 
 > > #SBATCH --job-name=sharpen
 > > #SBATCH --nodes=1
-> > #SBATCH --ntasks-per-node=128
-> > #SBATCH --time=0:15:0
-> > #SBATCH --account=t01
+> > #SBATCH --time=00:15:00
 > > 
-> > module load sharpen
+> > module load epcc-job-env
+> > module load training/sharpen/1.0
 > >
 > > # Run application using a single process (i.e. in serial)
-> > srun -n 1 sharpen
+> > srun -n 1 sharpen-mpi.x

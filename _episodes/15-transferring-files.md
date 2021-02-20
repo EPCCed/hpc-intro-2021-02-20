@@ -26,7 +26,7 @@ The syntax is: `wget https://some/link/to/a/file.tar.gz`. For example, download 
 lesson sample files using the following command:
 
 ```
-{{ site.host_prompt }} wget {{ site.url }}{{ site.baseurl }}/files/bash-lesson.tar.gz
+{{ site.host_prompt }} wget https://epcced.github.io/hpc-intro-2021-02-20/files/bash-lesson.tar.gz
 ```
 {: .bash}
 
@@ -37,13 +37,13 @@ for new users, but we'll break it down here:
 
 To transfer *to* another computer:
 ```
-{{ site.local_prompt }} scp /path/to/local/file.txt yourUsername@remote.computer.address:/path/on/remote/computer
+{{ site.local_prompt }} scp /path/to/local/file.txt userid@remote.computer.address:/path/on/remote/computer
 ```
 {: .bash}
 
 To download *from* another computer:
 ```
-{{ site.local_prompt }} scp yourUsername@remote.computer.address:/path/on/remote/computer/file.txt /path/to/local/
+{{ site.local_prompt }} scp userid@remote.computer.address:/path/on/remote/computer/file.txt /path/to/local/
 ```
 {: .bash}
 
@@ -52,14 +52,14 @@ after the `:` is relative to our home directory. We can simply just add a `:` an
 if we don't care where the file goes.
 
 ```
-{{ site.local_prompt }} scp local-file.txt yourUsername@remote.computer.address:
+{{ site.local_prompt }} scp local-file.txt userid@remote.computer.address:
 ```
 {: .bash}
 
 To recursively copy a directory, we just add the `-r` (recursive) flag:
 
 ```
-{{ site.local_prompt }} scp -r some-local-folder/ yourUsername@remote.computer.address:target-directory/
+{{ site.local_prompt }} scp -r some-local-folder/ userid@remote.computer.address:target-directory/
 ```
 {: .bash}
 
@@ -72,7 +72,7 @@ To recursively copy a directory, we just add the `-r` (recursive) flag:
 >
 > The syntax is similar to `scp`. To transfer *to* another computer with commonly used options:
 > ```
-> [local]$ rsync -avzP /path/to/local/file.txt yourUsername@remote.computer.address:/path/on/remote/computer
+> [local]$ rsync -avzP /path/to/local/file.txt userid@remote.computer.address:/path/on/remote/computer
 > ```
 > {: .bash}
 >
@@ -84,7 +84,7 @@ To recursively copy a directory, we just add the `-r` (recursive) flag:
 >
 > To recursively copy a directory, we can use the same options:
 > ```
-> [local]$ rsync -avzP /path/to/local/dir yourUsername@remote.computer.address:/path/on/remote/computer
+> [local]$ rsync -avzP /path/to/local/dir userid@remote.computer.address:/path/on/remote/computer
 > ```
 > {: .bash}
 > 
@@ -92,7 +92,7 @@ To recursively copy a directory, we just add the `-r` (recursive) flag:
 > 
 > To download a file, we simply change the source and destination:
 > ```
-> [local]$ rsync -avzP yourUsername@remote.computer.address:/path/on/remote/computer/file.txt /path/to/local/
+> [local]$ rsync -avzP userid@remote.computer.address:/path/on/remote/computer/file.txt /path/to/local/
 > ```
 > {: .bash}
 {: .callout}

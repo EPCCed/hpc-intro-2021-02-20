@@ -28,8 +28,6 @@ properties of the jobs on the cluster - including input parameters, job options 
 > as memory use - may also have a bearing on how you choose resources and constrain your
 > choice.
 >
-> **TODO:** Add in link to more information on what sharpen actually does for those that
-> are interested.
 > 
 > For those that have come across HPC benchmarking before, you may be aware that people
 > often make a distinction between *strong scaling* and *weak scaling*:
@@ -113,63 +111,6 @@ Calculation time was 5.579000 seconds
 Overall run time was 5.671895 seconds
 ```
 
-You can also get an estimate of the overall run time from the final job statistics. If
-we look at how long the finished job ran for, this will provide a quick way to see
-roughly what the runtime was. This can be useful if you want to know quickly if a 
-job was faster or not than a previous job (as oyu do not have to find the output file
-to look up the performance) but the number is not as accurate as the performance recorded
-by the application itself and also includes static overheads from running the job
-(such as loading modules and startup time) that can skew the timings. To do this on
-use `{{ site.sched_hist }} {{ site.sched_flag_histdetail }}` with the job ID, e.g.:
-
-```
-{{ site.host_prompt }} {{ site.sched_hist }} {{ site.sched_flag_histdetail }} 12345
-```
-{: .language-bash}
-```
-Job Id: 7099670.sdb
-    Job_Name = sharpen
-    Job_Owner = tc011dsh@eslogin1-ldap
-    resources_used.cpupercent = 0
-    resources_used.cput = 00:00:00
-    resources_used.mem = 0kb
-    resources_used.ncpus = 24
-    resources_used.vmem = 0kb
-    resources_used.walltime = 00:00:11
-    job_state = F
-    queue = R7090548
-    server = sdb
-    Account_Name = tc011
-    Checkpoint = u
-    ctime = Fri Jun 26 17:32:35 2020
-    Error_Path = eslogin1-ldap:/work/tc011/tc011/tc011dsh/sharpen.e7099670
-    exec_host = mom2/177*24
-    exec_vnode = (archer_2907:ncpus=24)
-    Hold_Types = n
-    Join_Path = n
-    Keep_Files = n
-    Mail_Points = a
-    mtime = Fri Jun 26 17:33:17 2020
-    Output_Path = eslogin1-ldap:/work/tc011/tc011/tc011dsh/sharpen.o7099670
-    Priority = 0
-    qtime = Fri Jun 26 17:32:35 2020
-    Rerunable = False
-    Resource_List.mpiprocs = 24
-    Resource_List.ncpus = 24
-    Resource_List.nodect = 1
-    Resource_List.place = free
-    Resource_List.select = 1:mpiprocs=24:ompthreads=1:serial=false:ppn=false:vn
-        type=cray_compute
-    Resource_List.walltime = 00:05:00
-    stime = Fri Jun 26 17:33:02 2020
-    session_id = 13597
-    jobdir = /home/tc011/tc011/tc011dsh
-    substate = 92
-    Variable_List = PBS_O_SYSTEM=Linux,NUM_PES=24,PBS_O_SHELL=/bin/bash,
-        PBS_O_HOME=/home/tc011/tc011/tc011dsh,PBS_O_LOGNAME=tc011dsh,
-    ...
-```
-{: .output}
 
 {% include /snippets/16/view_output.snip %}
 

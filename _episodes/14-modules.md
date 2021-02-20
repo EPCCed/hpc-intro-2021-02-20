@@ -8,9 +8,8 @@ objectives:
 - "Understand how to load and use a software package."
 keypoints:
 - "Load software with `module load softwareName`"
-- "Unload software with `module purge`"
+- "Unload modules with `module unload <name>`"
 - "The module system handles software versioning and package conflicts for you automatically."
-- "You can edit your `.bashrc` file to automatically load a software package."
 ---
 
 On a high-performance computing system, it is often the case that no software is loaded by default. If we want to use a
@@ -88,71 +87,80 @@ To see available software modules, use `module avail`
 ```
 {: .output}
 
-## Loading and unloading software
+## Loading and unloading modules
 
-To load a software module, use `module load`.
-In this example we will use Python 3.
+To load a software module, use `module load`. Let's say we would like
+to use the NetCDF utility `ncdump`. 
 
-Initially, Python 3 is not loaded. 
-We can test this by using the `which` command.
-`which` looks for programs the same way that Bash does,
+On login, `ncdump` is not availble. We can test this by using the `which`
+command. `which` looks for programs the same way that Bash does,
 so we can use it to tell us where a particular piece of software is stored.
 
 ```
-{{ site.host_prompt }} which python3
+{{ site.host_prompt }} which ncdump
 ```
 {: .bash}
 ```
-{% include /snippets/14/which_missing.snip %}
+which: no ncdump in (/usr/local/maven/bin:/lus/cls01095/work/y07/shared/bolt/0.7/bin:/work/y07/shared/utils/bin:/opt/cray/pe/perftools/20.10.0/bin:/opt/cray/pe/papi/6.0.0.4/bin:/opt/cray/libfabric/1.11.0.0.233/bin:/opt/cray/pe/craype/2.7.2/bin:/opt/cray/pe/cce/10.0.4/cce-clang/x86_64/bin:/opt/cray/pe/cce/10.0.4/binutils/x86_64/x86_64-pc-linux-gnu/bin:/opt/cray/pe/cce/10.0.4/binutils/cross/x86_64-aarch64/aarch64-linux-gnu/../bin:/opt/cray/pe/cce/10.0.4/utils/x86_64/bin:/usr/local/Modules/bin:/usr/local/bin:/usr/bin:/bin:/opt/cray/pe/bin:/usr/lib/mit/bin)
 ```
 {: .output}
 
-We can load the `python3` command with `module load`:
+We can find the `ncdump` command by using `module load`:
 
 ```
-{% include /snippets/14/load_python.snip %}
+{{ site.host_prompt }} module load cray-netcdf 
 ```
 {: .bash}
 ```
-{% include /snippets/14/which_python.snip %}
+/opt/cray/pe/netcdf/4.7.4.2/bin/ncdump
 ```
 {: .output}
 
 So, what just happened?
 
-To understand the output, first we need to understand the nature of the `$PATH` environment
-variable. `$PATH` is a special environment variable that controls where a UNIX system looks for
-software. Specifically `$PATH` is a list of directories (separated by `:`) that the OS searches
-through for a command before giving up and telling us it can't find it. As with all environment
-variables we can print it out using `echo`.
+To understand the output, first we need to understand the nature of the
+`$PATH` environment variable. `$PATH` is a special environment variable
+that controls where a UNIX system looks for software. Specifically,
+`$PATH` is a list of directories (separated by `:`) that the OS searches
+through for a command before giving up and telling us it can't find it.
+As with all environment variables we can print it out using `echo`.
 
 ```
 {{ site.host_prompt }} echo $PATH
 ```
 {: .bash}
 ```
+/opt/cray/pe/netcdf/4.7.4.2/bin:
 {% include /snippets/14/path.snip %}
 ```
 {: .output}
 
-You'll notice a similarity to the output of the `which` command. In this case, there's only one
-difference: the different directory at the beginning. When we ran the `module load` command,
-it added a directory to the beginning of our `$PATH`. Let's examine what's there:
+You'll notice a similarity to the output of the `which` command. In this case,
+there's only one difference: the different directory at the beginning. When we
+ran the `module load` command, it added a directory to the beginning of our
+`$PATH`. Let's examine what's there:
 
 ```
-{% include /snippets/14/ls_dir.snip %}
+{{ site.host_prompt }} ls /opt/cray/pe/netcdf/4.7.4.2/bin
+
 ```
 {: .bash}
 ```
-{% include /snippets/14/ls_dir_output.snip %}
+nc-config  nccopy  ncdump  ncgen  ncgen3  ncxx4-config  nf-config
 ```
 {: .output}
 
-Taking this to it's conclusion, `module load` will add software to your `$PATH`. It "loads"
-software. A special note on this - depending on which version of the `module` program that is
-installed at your site, `module load` will also load required software dependencies.
+In summmary, `module load` will add software to your `$PATH`.
+`module load` may also load additional modules with software dependencies.
 
-{% include /snippets/14/depend_demo.snip %}
+To unload a module, use `module unload` with the relevant module name.
+
+> ## Unload!
+>
+> Confirm you can unload the `cray-netcdf` module and check what happens
+> to the `PATH` environment variable.
+{: .challenge}
+
 
 ## Software versioning
 
@@ -165,35 +173,32 @@ either of these example cases, it helps to be very specific about what software 
 Let's examine the output of `module avail` more closely.
 
 ```
-{{ site.host_prompt }} module avail
+{{ site.host_prompt }} module avail cray-netcdf
 ```
 {: .bash}
 ```
-{% include /snippets/14/module_avail.snip %}
+--------------------------- /opt/cray/pe/modulefiles ---------------------------
+cray-netcdf-hdf5parallel/4.7.4.0           cray-netcdf/4.7.4.0           
+cray-netcdf-hdf5parallel/4.7.4.2(default)  cray-netcdf/4.7.4.2(default)  
 ```
 {: .output}
 
-{% include /snippets/14/gcc_example.snip %}
+Note that we have two different versions of `cray-netcdf` (and also two
+versions of something else `cray-netcdf-hdf5parallel` which match our
+search).
 
-> ## Using software modules in scripts
+
+> ## Using `module swap`
 >
-> Create a job that is able to run `python3 --version`. Remember, no software is loaded by default!
-> Running a job is just like logging on to the system (you should not assume a module loaded on the
-> login node is loaded on a compute node).
+> Load module `cray-netcdf` as before. Note that if we do not specifify
+> a particular version, we load a default version.
+>
+> If we wish to change versions, we can use
+> `module swap <old-module> <new-module>`. Try this to obtain
+> `cray-netcdf/4.7.4.0`. Check what has happened to the location of
+> the `ncdump` utility.
 {: .challenge}
 
-> ## Loading a module by default
-> 
-> Adding a set of `module load` commands to all of your scripts and having to manually load modules
-> every time you log on can be tiresome. Fortunately, there is a way of specifying a set of 
-> "default  modules" that always get loaded, regardless of whether or not you're logged on or 
-> running a job. Every user has two hidden files in their home directory: `.bashrc` and 
-> `.bash_profile` (you can see these files with `ls -la ~`). These scripts are run every time you 
-> log on or run a job. Adding a `module load` command to one of these shell scripts means that 
-> that module will always be loaded. Modify either your `.bashrc` or `.bash_profile` scripts to 
-> load a commonly used module like Python. Does your `python3 --version` job from before still 
-> need `module load` to run?
-{: .challenge}
 
 ## Installing software of our own
 
@@ -209,7 +214,6 @@ As an example we will install the bioinformatics toolkit `seqtk`. We'll first ne
 source code from GitHub using `git`.
 
 ```
-{{ site.host_prompt }} module switch openssl openssl/1.1.1c_build1
 {{ site.host_prompt }} git clone https://github.com/lh3/seqtk.git
 ```
 {: .bash}
