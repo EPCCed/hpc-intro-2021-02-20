@@ -46,6 +46,9 @@ The scheduler used in this lesson is {{ site.sched_name }}. Although {{ site.sch
 running jobs is quite similar regardless of what software is being used. The exact syntax might change, but the
 concepts remain the same.
 
+
+{% include /snippets/13/filesystem_issues.snip %}
+
 ## Running a batch job
 
 The most basic use of the scheduler is to run a command non-interactively. Any command (or series 
@@ -93,12 +96,13 @@ the *queue*. To check on our job's status, we check the queue using the command
 ```
 {: .bash}
 ```
-{% include /snippets/13/statu_output.snip %}
+{% include /snippets/13/squeue_running.snip %}
 ```
 {: .output}
 
-We can see all the details of our job, most importantly that it is in the "R" or "RUNNING" state.
-Sometimes our jobs might need to wait in a queue ("Q" or "QUEUED") or have an error. The best way to check
+We can see all the details of our job, most importantly that it is in the "R"
+or "RUNNING" state. Sometimes our jobs might need to wait in a queue
+("PD" or "PENDING") or have an error. The best way to check
 our job's status is with `{{ site.sched_status }}`. Of course, running `{{ site.sched_status }}` repeatedly to check on things can be
 a little tiresome. To see a real-time view of our jobs, we can use the `watch` command. `watch`
 reruns a given command at 2-second intervals. This is too frequent, and will likely upset your system
@@ -156,7 +160,12 @@ Submit the following job (`{{ site.sched_submit }} {{ site.sched_submit_options 
 
 ```
 #!/bin/bash
-{{ site.sched_comment }} {{ site.sched_flag_name }} new_name
+
+{{ site.sched_comment }} --job_name=myjob
+{{ site.sched_comment }} --partition=standard
+{{ site.sched_comment }} --qos=standard
+{{ site.sched_comment }} --time=00:05:00
+
 #PBS -A tc011
 #PBS -l walltime=00:10:00
 #PBS -l select=1
@@ -171,7 +180,7 @@ sleep 60
 ```
 {: .bash}
 ```
-{% include /snippets/13/statu_name_output.snip %}
+{% include /snippets/13/squeue_pending.snip %}
 ```
 {: .output}
 
@@ -204,8 +213,6 @@ about how to make sure that you're using resources effectively in a later episod
 >
 > Submit a job that will use 2 full nodes and 10 minutes of walltime.
 {: .challenge}
-
-{% include /snippets/13/env_challenge.snip %}
 
 Resource requests are typically binding. If you exceed them, your job will be killed. Let's use
 walltime as an example. We will request 30 seconds of walltime, and attempt to run a job for one minute.
@@ -295,8 +302,6 @@ tasks as a one-off with `{{ site.sched_interactive }}`.
 
 {% include /snippets/13/interactive_example.snip %}
 
-{% include /snippets/13/filesystem_issues.snip %}
-
 ## Running parallel jobs using MPI
 As we have already seen, the power of HPC systems comes from *parallelism*, i.e. having lots of
 processors/disks etc. connected together rather than having more powerful components than your
@@ -346,8 +351,8 @@ If your job runs correctly, you should see an output file called
 ```
 {: .bash}
 ```
--rw-r--r-- 1 yourUsername tc011 1762743 Jun 26 17:29 fuzzy.pgm
--rw------- 1 yourUsername tc011 1678630 Jun 26 17:33 sharpened.pgm
+-rw-r--r-- 1 userid ta018 1762743 Jun 26 17:29 fuzzy.pgm
+-rw------- 1 userid ta018 1678630 Jun 26 17:33 sharpened.pgm
 ```
 {: .output}
 
