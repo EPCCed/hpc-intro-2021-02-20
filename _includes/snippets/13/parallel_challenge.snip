@@ -1,29 +1,29 @@
 > ## Running parallel jobs
 >
-> Modify the sharpen script that you used above to use 3 full nodes rather than 2. Submit the
-> script and check the output to confirm that it used the correct number of cores in parallel
-> for the calculation.
+> Modify the sharpen script that you used above to use all 128 cores on
+> one node.  Check the output to confirm that it used the correct number
+> of cores in parallel for the calculation.
 > 
 > > ## Solution
 > >
-> > We need to change the number of nodes requested to 3 in the PBS options and change the number
-> > of parallel processes to use in the option to the `aprun` parallel launch command to 
-> > 72 (3 * 24 cores per node). Here is the fully modified script
+> > Here is a modified script
 > > 
 > > ```
 > > #!/bin/bash
-> > #PBS -N mpisharpen
-> > #PBS -l select=3
-> > #PBS -l walltime=00:10:00
-> > #PBS -A tc011
-> >
-> > # Change to the directory that the job was submitted from
-> > cd $PBS_O_WORKDIR
 > > 
-> > module load epcc-training/sharpen
-> > cp $SHARPEN_DATA/fuzzy.pgm .
+> > #SBATCH --partition=standard
+> > #SBATCH --qos=standard
+> > #SBATCH --time=00:00:30
 > > 
-> > aprun -n 72 -N 24 sharpen
+> > #SBATCH --ntasks=128
+> > #SBATCH --ntasks-per-node=128
+> > 
+> > module load epcc-job-env
+> > module load training/sharpen/1.0
+> > 
+> > cp $SHARPEN_INPUT/fuzzy.pgm .
+> > 
+> > srun --cpu_bind=rank sharpen-mpi.x
 > > ```
 > {: .solution}
 {: .challenge}

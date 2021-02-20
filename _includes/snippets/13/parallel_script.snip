@@ -1,15 +1,17 @@
 ```
 #!/bin/bash
-#PBS -N mpisharpen
-#PBS -l select=2
-#PBS -l walltime=00:10:00
-#PBS -A tc011
 
-# Change to the directory that the job was submitted from
-cd $PBS_O_WORKDIR
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --time=00:05:00
 
-module load epcc-training/sharpen
-cp $SHARPEN_DATA/fuzzy.pgm .
+#SBATCH --ntasks=16
+#SBATCH --ntasks-per-node=16
 
-aprun -n 48 -N 24 sharpen
+module load epcc-job-env
+module load training/sharpen/1.0
+
+cp $SHARPEN_INPUT/fuzzy.pgm .
+
+srun sharpen
 ```
